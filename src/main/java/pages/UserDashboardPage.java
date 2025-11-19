@@ -25,6 +25,9 @@ public class UserDashboardPage extends BasePage {
     @FindBy(xpath = "//span[@class='oxd-topbar-header-breadcrumb']//h6[text()='Admin']")
     private WebElement adminPageHeader;
 
+    @FindBy(xpath = "//span[@class='oxd-text oxd-text--span oxd-main-menu-item--name']")
+    private List<WebElement> mainMenuItems;
+
     @Step("Verify all expected dashboard widget titles are present")
     public void verifyTitlesPresent() {
         logger.info("Verifying dashboard widget titles");
@@ -44,7 +47,7 @@ public class UserDashboardPage extends BasePage {
     @Step("Verify the Admin User Management page")
     public AdminUserManagementPage goToAdminUserManagementPage() {
         logger.info("Navigating to Admin User Management Page");
-        clickOnNavigationFromList(By.xpath("//span[@class='oxd-text oxd-text--span oxd-main-menu-item--name']"), "Admin");
+        clickOnItemFromList(mainMenuItems, "Admin");
         verifyTheElementPresent(adminPageHeader);
         return new AdminUserManagementPage(driver);
     }

@@ -85,11 +85,10 @@ public class BasePage extends HelperClass {
         }
     }
 
-    public void clickOnNavigationFromList(By element, String optionText) {
+    public void clickOnItemFromList(List<WebElement> element, String optionText) {
         try {
             waitingTimeImpl();
-            List<WebElement> options = driver.findElements(element);
-            for (WebElement option : options) {
+            for (WebElement option : element) {
                 if (option.getText().trim().equals(optionText)) {
                     option.click();
                     return;

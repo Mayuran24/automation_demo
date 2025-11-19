@@ -26,6 +26,7 @@ public class AdminManagementPageTest extends BaseTest {
         loginPage.typeIntoPasswordField(ConfigReader.getProperty("password"));
         loginPage.clickLoginBtn();
         userDashboardPage.goToAdminUserManagementPage();
+        adminManagementPage.clickOnTopNavigationItem("Nationalities");
         loginPage.clickLogoutBtn();
     }
 }
