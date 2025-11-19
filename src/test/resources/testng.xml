@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Suite">
+<!--    <listeners>-->
+<!--        <listener class-name="io.qameta.allure.testng.AllureTestNg"/>-->
+
+<!--    </listeners>-->
+    <test name="TestAutomation">
+        <classes>
+            <class name="login_test.LoginPageTest"/>
+            <class name="dashboard_test.DashboardPageTest"></class>
+            <class name="admin_management.AdminManagementPageTest"></class>
+        </classes>
+    </test>
+</suite>

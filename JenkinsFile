@@ -1,0 +1,57 @@
+pipeline {
+    agent any
+
+    tools {
+        maven 'maven-3.9.6'
+        jdk 'jdk17'
+    }
+
+    options {
+        timestamps()
+        ansiColor('xterm')
+    }
+
+    stages {
+
+        stage('Build & Test') {
+            steps {
+                // Run tests, continue to next stage even if some fail
+                bat 'mvn clean test -Pchrome verify'
+            }
+        }
+
+        stage('Allure Report') {
+            steps {
+                // Generate Allure report
+                allure([
+                    includeProperties: false,
+                    jdk: "",
+                    reportBuildPolicy: 'ALWAYS',
+                    results: [[path: "target/allure-results"]]
+                ])
+            }
+        }
+    }
+
+    post {
+        always {
+            // Publish test results to Jenkins
+            junit '**/target/surefire-reports/*.xml'
+
+            // Mark unstable if tests failed but pipeline continued
+            script {
+                if (currentBuild.result == null) {
+                    currentBuild.result = 'UNSTABLE'
+                }
+            }
+
+            echo "Build finished!"
+        }
+        success {
+            echo "Build succeeded!"
+        }
+        failure {
+            echo "Build failed!"
+        }
+    }
+}
