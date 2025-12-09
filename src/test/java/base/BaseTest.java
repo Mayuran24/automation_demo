@@ -60,10 +60,7 @@ public abstract class BaseTest {
 
         getDriver().manage().deleteAllCookies();
         getDriver().manage().window().maximize();
-    }
 
-    @BeforeMethod(alwaysRun = true)
-    public static void navigateToBaseUrl() {
         getDriver().get(baseUrl);
         logger.info("Navigated to base URL: " + baseUrl);
     }
