@@ -1,7 +1,5 @@
 package base;
 
-import helper.AllureListener;
-import helper.ConfigReader;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -9,40 +7,79 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.testng.ITestResult;
 import org.testng.annotations.*;
+import helper.AllureListener;
+import helper.ConfigReader;
 
 @Listeners({AllureListener.class})
-public class BaseTest {
-    protected WebDriver driver;
+public abstract class BaseTest {
+    //protected WebDriver driver;
     private static final Logger logger = LogManager.getLogger(BaseTest.class);
+    protected static ThreadLocal<WebDriver> driver = new ThreadLocal<>();
 
-    @BeforeClass
-    public void setUp(){
-        String browser = ConfigReader.getProperty("browser").toLowerCase();
-        String baseUrl = ConfigReader.getProperty("baseUrl");
-        if(browser == null) browser = "chrome";
+    private AllureListener allureListener;
+
+    private static String browser;
+
+    private static String baseUrl;
+
+    public static WebDriver getDriver() {
+        return driver.get();
+    }
+
+    public static void setDriver(WebDriver driverInstance) {
+        driver.set(driverInstance);
+    }
+
+    @BeforeClass(alwaysRun = true)
+    public static void setUp() {
+        browser = ConfigReader.getProperty("browser").toLowerCase();
+        baseUrl = ConfigReader.getProperty("baseUrl");
+
+        if (browser == null) browser = "chrome";
         switch (browser) {
             case "chrome":
                 WebDriverManager.chromedriver().setup();
-                driver = new ChromeDriver(); break;
+                //driver = new ChromeDriver();
+                setDriver(new ChromeDriver());
+                break;
             case "firefox":
                 WebDriverManager.firefoxdriver().setup();
-                driver = new FirefoxDriver(); break;
+                //driver = new FirefoxDriver();
+                setDriver(new FirefoxDriver());
+                break;
             case "edge":
                 WebDriverManager.edgedriver().setup();
-                driver = new EdgeDriver(); break;
-            default: throw new RuntimeException("Browser not supported: " + browser);
+                //driver = new EdgeDriver();
+                setDriver(new EdgeDriver());
+                break;
+            default:
+                throw new RuntimeException("Browser not supported: " + browser);
         }
 
-        driver.manage().window().maximize();
-        driver.get(baseUrl);
-        logger.info("Opened {} browser with URL: {}", browser, baseUrl);
+        getDriver().manage().deleteAllCookies();
+        getDriver().manage().window().maximize();
     }
 
-    @AfterClass
-    public void tearDown(){
-        if(driver != null){
-            driver.quit();
+    @BeforeMethod(alwaysRun = true)
+    public static void navigateToBaseUrl() {
+        getDriver().get(baseUrl);
+        logger.info("Navigated to base URL: " + baseUrl);
+    }
+
+    @AfterMethod(alwaysRun = true)
+    public static void captureFailure(ITestResult result) {
+        if (result.getStatus() == ITestResult.FAILURE) {
+            logger.error("Test Failed: " + result.getName());
+            AllureListener.takeScreenshot(getDriver());
+        }
+    }
+
+    @AfterClass(alwaysRun = true)
+    public void tearDown() {
+        if (getDriver() != null) {
+            getDriver().quit();
             logger.info("Closed browser");
         }
     }

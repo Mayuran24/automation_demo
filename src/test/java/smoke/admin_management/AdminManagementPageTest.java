@@ -1,4 +1,4 @@
-package admin_management;
+package smoke.admin_management;
 
 import base.BaseTest;
 import helper.ConfigReader;
@@ -13,19 +13,20 @@ public class AdminManagementPageTest extends BaseTest {
     private LoginPage loginPage;
     private UserDashboardPage userDashboardPage;
 
-    @BeforeMethod
+    @BeforeMethod(alwaysRun = true)
     public void initPage() {
-        loginPage = new LoginPage(driver);
-        userDashboardPage = new UserDashboardPage(driver);
-        adminManagementPage = new AdminUserManagementPage(driver);
+        loginPage = new LoginPage(getDriver());
+        userDashboardPage = new UserDashboardPage(getDriver());
+        adminManagementPage = new AdminUserManagementPage(getDriver());
     }
 
-    @Test
+    @Test(groups = {"smoke"})
     public void testAdminManagementPage() {
         loginPage.typeIntoUserNameField(ConfigReader.getProperty("username"));
         loginPage.typeIntoPasswordField(ConfigReader.getProperty("password"));
         loginPage.clickLoginBtn();
         userDashboardPage.goToAdminUserManagementPage();
+        adminManagementPage.verifyTopNavigationList();
         adminManagementPage.clickOnTopNavigationItem("Nationalities");
         loginPage.clickLogoutBtn();
     }

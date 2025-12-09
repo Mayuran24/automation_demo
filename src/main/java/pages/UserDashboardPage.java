@@ -1,9 +1,10 @@
 package pages;
 
+import pages.AdminUserManagementPage;
 import base.BasePage;
+import ui.helper.HelperClass;
 import io.qameta.allure.Step;
 import org.apache.logging.log4j.Logger;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -13,9 +14,11 @@ import java.util.Arrays;
 import java.util.List;
 
 public class UserDashboardPage extends BasePage {
+    private HelperClass helper;
     public UserDashboardPage(WebDriver driver) {
         super(driver);
         PageFactory.initElements(driver, this);
+        helper = new HelperClass(driver);
     }
 
     private static Logger logger = org.apache.logging.log4j.LogManager.getLogger(UserDashboardPage.class);
@@ -31,7 +34,7 @@ public class UserDashboardPage extends BasePage {
     @Step("Verify all expected dashboard widget titles are present")
     public void verifyTitlesPresent() {
         logger.info("Verifying dashboard widget titles");
-        waitingTimeImpl();
+        helper.waitingTime();
         List<String> expectedTitles = Arrays.asList(
                 "Quick Launch",
                 "Employee Distribution by Sub Unit",
@@ -41,7 +44,7 @@ public class UserDashboardPage extends BasePage {
                 "Buzz Latest Posts",
                 "Employee Distribution by Location"
         );
-        verifyListOfElementsText(dashboardWidgetTitles, expectedTitles, "Title not found");
+        verifyListOfElementsText(dashboardWidgetTitles, expectedTitles, "Title not found!");
     }
 
     @Step("Verify the Admin User Management page")

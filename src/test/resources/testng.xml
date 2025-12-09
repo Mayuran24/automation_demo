@@ -9,7 +9,7 @@
         <classes>
             <class name="login_test.LoginPageTest"/>
             <class name="dashboard_test.DashboardPageTest"></class>
-            <class name="admin_management.AdminManagementPageTest"></class>
+            <class name="smoke.admin_management.AdminManagementPageTest"></class>
         </classes>
     </test>
 </suite>

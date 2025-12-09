@@ -2,10 +2,9 @@ package helper;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.openqa.selenium.devtools.v140.io.IO;
 
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 public class ConfigReader {
@@ -16,13 +15,13 @@ public class ConfigReader {
         try {
             // Get the Maven system properties first
             String browser = System.getProperty("browser");  // browser from profile
-            //String env = System.getProperty("env", "staging");   // default env = dev
 
-            // Load environment-specific properties if needed
-            String path = "src/test/resources/config-" + browser + ".properties";
-            FileInputStream fis = new FileInputStream(path);
-            properties.load(fis);
-            logger.info("Loaded properties from {}", path);
+            //Load environment dynamically from resources folder
+            InputStream is = ConfigReader.class
+                    .getClassLoader()
+                    .getResourceAsStream("config-" + browser + ".properties");
+
+            properties.load(is);
 
             // Override browser from Maven profile if provided
             if (browser != null) {
@@ -30,9 +29,8 @@ public class ConfigReader {
             }
 
             logger.info("Browser selected: {}", properties.getProperty("browser"));
-        }catch (IOException e){
+        } catch (IOException e) {
             logger.error("Failed to load properties file", e);
-            throw new RuntimeException("Failed to load config properties.");
         }
     }
 

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Suite">
+    <test name="regression_test">
+        <groups>
+            <run>
+                <include name="regression"/>
+            </run>
+        </groups>
+        <classes>
+            <class name="regression.login_test.LoginPageTest"/>
+            <class name="regression.dashboard_test.DashboardPageTest"/>
+            <class name="smoke.admin_management.AdminManagementPageTest"/>
+        </classes>
+    </test>
+</suite>

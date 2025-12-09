@@ -1,24 +1,30 @@
 package base;
 
-import helper.AllureListener;
-import helper.HelperClass;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.FluentWait;
+import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.Wait;
+import helper.AllureListener;
+import ui.helper.HelperClass;
 
+import java.time.Duration;
 import java.util.List;
 
-public class BasePage extends HelperClass {
+public abstract class BasePage {
+    protected WebDriver driver;
+    private HelperClass helper;
+
     public BasePage(WebDriver driver) {
-        super(driver);
-        PageFactory.initElements(driver, this);
+        this.driver = driver;
+        helper = new HelperClass(driver);
     }
 
     public void clickOnButton(WebElement element, String buttonName) {
         try {
-            waitingTimeWithWebElement(5, element);
+            helper.waitingTime(5, element);
             element.click();
         } catch (NoSuchElementException e) {
             AllureListener.takeScreenshot(driver); // attach screenshot
@@ -26,9 +32,33 @@ public class BasePage extends HelperClass {
         }
     }
 
+    public void clickWithRetry(By locator, int retryCount) {
+        while (retryCount > 0) {
+            try {
+                driver.findElement(locator).click();
+                break;
+            } catch (Exception e) {
+                retryCount--;
+                if (retryCount == 0) {
+                    throw e;
+                }
+            }
+        }
+    }
+
+    public void clickWithWaitingTime(By locator) {
+        Wait<WebDriver> wait = new FluentWait<>(driver)
+                .withTimeout(Duration.ofSeconds(10))
+                .pollingEvery(Duration.ofMillis(500))
+                .ignoring(Exception.class);
+
+        WebElement element = wait.until(driver -> driver.findElement(locator));
+        element.click();
+    }
+
     public void typeIntoTheTextField(WebElement element, String text) {
         try {
-            waitingTimeWithWebElement(10, element);
+            helper.waitingTime(10, element);
             element.sendKeys(text);
         } catch (NoSuchElementException e) {
             AllureListener.takeScreenshot(driver); // attach screenshot
@@ -45,7 +75,7 @@ public class BasePage extends HelperClass {
     }
 
     public void verifyTheElementPresent(WebElement element) {
-        waitingTimeImpl();
+        helper.waitingTime();
         if (!element.isDisplayed()) {
             AllureListener.takeScreenshot(driver); // attach screenshot
             throw new AssertionError("Element is not displayed: " + element.toString());
@@ -63,13 +93,10 @@ public class BasePage extends HelperClass {
         }
     }
 
-    public void selectFromDropdown(WebElement dropdownElement, By optionsLocator, String optionText) {
+    public void selectFromDropdown(WebElement dropdownElement, List<WebElement> options, String optionText) {
         try {
-            waitingTimeWithWebElement(10, dropdownElement);
+            helper.waitingTime(10, dropdownElement);
             dropdownElement.click();    // Expand dropdown
-
-            List<WebElement> options = driver.findElements(optionsLocator);
-
             for (WebElement option : options) {
                 if (option.getText().trim().equals(optionText)) {
                     option.click();
@@ -85,12 +112,12 @@ public class BasePage extends HelperClass {
         }
     }
 
-    public void clickOnItemFromList(List<WebElement> element, String optionText) {
+    public void clickOnItemFromList(List<WebElement> elements, String optionText) {
         try {
-            waitingTimeImpl();
-            for (WebElement option : element) {
-                if (option.getText().trim().equals(optionText)) {
-                    option.click();
+            helper.waitingTime();
+            for (WebElement element : elements) {
+                if (element.getText().trim().equals(optionText)) {
+                    element.click();
                     return;
                 }
             }
