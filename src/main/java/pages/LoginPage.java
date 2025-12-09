@@ -20,7 +20,7 @@ public class LoginPage extends BasePage {
     @FindBy(xpath = "//h5[text() = 'Login']")
     private WebElement loginPageTitle;
 
-    @FindBy(name = "usernames")
+    @FindBy(name = "username")
     private WebElement userNameField;
 
     @FindBy(name = "password")
