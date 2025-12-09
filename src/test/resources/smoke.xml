@@ -8,8 +8,6 @@
             </run>
         </groups>
         <classes>
-            <class name="regression.login_test.LoginPageTest"/>
-            <class name="regression.dashboard_test.DashboardPageTest"/>
             <class name="smoke.admin_management.AdminManagementPageTest"/>
         </classes>
     </test>
