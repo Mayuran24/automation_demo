@@ -1,8 +1,10 @@
 package pages;
 
+import io.qameta.allure.testng.AllureTestNg;
+import org.testng.annotations.Listeners;
 import pages.AdminUserManagementPage;
 import base.BasePage;
-import ui.helper.HelperClass;
+import helper.HelperClass;
 import io.qameta.allure.Step;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
@@ -12,7 +14,7 @@ import org.openqa.selenium.support.PageFactory;
 
 import java.util.Arrays;
 import java.util.List;
-
+@Listeners({AllureTestNg.class})
 public class UserDashboardPage extends BasePage {
     private HelperClass helper;
     public UserDashboardPage(WebDriver driver) {

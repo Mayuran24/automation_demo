@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.testng.annotations.Listeners;
 import org.testng.asserts.SoftAssert;
 import base.BasePage;
-import ui.helper.HelperClass;
+import helper.HelperClass;
 
 @Listeners({AllureTestNg.class})
 public class LoginPage extends BasePage {
