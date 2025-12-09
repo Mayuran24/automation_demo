@@ -1,5 +1,7 @@
 package base;
 
+import helper.AllureListener;
+import helper.ConfigReader;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -8,18 +10,16 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.ITestResult;
-import org.testng.annotations.*;
-import helper.AllureListener;
-import helper.ConfigReader;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Listeners;
 
 @Listeners({AllureListener.class})
 public abstract class BaseTest {
     //protected WebDriver driver;
     private static final Logger logger = LogManager.getLogger(BaseTest.class);
     protected static ThreadLocal<WebDriver> driver = new ThreadLocal<>();
-
-    private AllureListener allureListener;
-
     private static String browser;
 
     private static String baseUrl;
