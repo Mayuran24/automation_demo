@@ -11,12 +11,23 @@ pipeline {
         ansiColor('xterm')
     }
 
+    parameters {
+        choice(name: 'Suite', choices: ['smoke.xml', 'regression.xml'], description: 'Select the test suite to run')
+    }
+
     stages {
+
+        stage('Checkout') {
+                    steps {
+                        git url: 'https://github.com/Mayuran24/automation_demo.git', branch: 'main'
+                    }
+                }
 
         stage('Build & Test') {
             steps {
                 // Run tests, continue to next stage even if some fail
-                bat 'mvn clean test -Pchrome verify'
+//                 bat 'mvn clean test -Pchrome verify'
+                sh "${MAVEN_HOME}/bin/mvn clean test -DsuiteXmlFile=${params.Suite}"
             }
         }
 
