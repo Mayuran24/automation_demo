@@ -7,8 +7,8 @@
 <!--    </listeners>-->
     <test name="TestAutomation">
         <classes>
-            <class name="login_test.LoginPageTest"/>
-            <class name="dashboard_test.DashboardPageTest"></class>
+            <class name="regression.login_test.LoginPageTest"/>
+            <class name="regression.dashboard_test.DashboardPageTest"></class>
             <class name="smoke.admin_management.AdminManagementPageTest"></class>
         </classes>
     </test>

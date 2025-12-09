@@ -1,7 +1,8 @@
-package ui.helper;
+package helper;
 
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -37,11 +38,10 @@ public class HelperClass {
             logger.error("Exception in waitingTime: ", e);
         }
     }
-
     public void waitingTime() {
         try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
+            driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        } catch (TimeoutException e) {
             logger.error("Exception in waitingTimeImpl: ", e);
         }
     }
