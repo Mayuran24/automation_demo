@@ -1,29 +1,28 @@
 package pages;
 
-import io.qameta.allure.testng.AllureTestNg;
-import org.testng.annotations.Listeners;
-import pages.AdminUserManagementPage;
 import base.BasePage;
 import helper.HelperClass;
 import io.qameta.allure.Step;
-import org.apache.logging.log4j.Logger;
+import io.qameta.allure.testng.AllureTestNg;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.testng.annotations.Listeners;
 
 import java.util.Arrays;
 import java.util.List;
+
 @Listeners({AllureTestNg.class})
 public class UserDashboardPage extends BasePage {
     private HelperClass helper;
+
     public UserDashboardPage(WebDriver driver) {
-        super(driver);
+        super(driver, UserDashboardPage.class);
         PageFactory.initElements(driver, this);
         helper = new HelperClass(driver);
     }
 
-    private static Logger logger = org.apache.logging.log4j.LogManager.getLogger(UserDashboardPage.class);
     @FindBy(xpath = "//div[@class='orangehrm-dashboard-widget-name']//p[@class='oxd-text oxd-text--p']")
     private List<WebElement> dashboardWidgetTitles;
 
@@ -32,6 +31,12 @@ public class UserDashboardPage extends BasePage {
 
     @FindBy(xpath = "//span[@class='oxd-text oxd-text--span oxd-main-menu-item--name']")
     private List<WebElement> mainMenuItems;
+
+    @FindBy(xpath = "//p[@class='oxd-userdropdown-name']")
+    private WebElement userProfileIcon;
+
+    @FindBy(xpath = "//a[text()= 'Logout']")
+    private WebElement logoutBtn;
 
     @Step("Verify all expected dashboard widget titles are present")
     public void verifyTitlesPresent() {
@@ -55,5 +60,13 @@ public class UserDashboardPage extends BasePage {
         clickOnItemFromList(mainMenuItems, "Admin");
         verifyTheElementPresent(adminPageHeader);
         return new AdminUserManagementPage(driver);
+    }
+
+    @Step("User logout from the application")
+    public void clickLogoutBtn() {
+        logger.info("User clicking on the user profile icon");
+        clickOnButton(userProfileIcon, "User profile option");
+        logger.info("User clicking on the logout button");
+        clickOnButton(logoutBtn, "Logout button");
     }
 }

@@ -1,22 +1,20 @@
 package pages;
 
+import base.BasePage;
+import helper.HelperClass;
 import io.qameta.allure.Step;
 import io.qameta.allure.testng.AllureTestNg;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.testng.annotations.Listeners;
 import org.testng.asserts.SoftAssert;
-import base.BasePage;
-import helper.HelperClass;
 
 @Listeners({AllureTestNg.class})
 public class LoginPage extends BasePage {
     private HelperClass helper;
-    private static final Logger logger = LoggerFactory.getLogger(LoginPage.class);
+
     @FindBy(xpath = "//h5[text() = 'Login']")
     private WebElement loginPageTitle;
 
@@ -32,14 +30,8 @@ public class LoginPage extends BasePage {
     @FindBy(xpath = "//h6[text()= 'Dashboard']")
     private WebElement userDashboardPage;
 
-    @FindBy(xpath = "//p[@class='oxd-userdropdown-name']")
-    private WebElement userProfileIcon;
-
-    @FindBy(xpath = "//a[text()= 'Logout']")
-    private WebElement logoutBtn;
-
     public LoginPage(WebDriver driver) {
-        super(driver);
+        super(driver, LoginPage.class);
         PageFactory.initElements(driver, this);
         helper = new HelperClass(driver);
     }
@@ -68,14 +60,6 @@ public class LoginPage extends BasePage {
     public void clickLoginBtn() {
         logger.info("Clicking on login button");
         clickOnButton(loginBtn, "Login Button");
-    }
-
-    @Step("User logout from the application")
-    public void clickLogoutBtn() {
-        logger.info("User clicking on the user profile icon");
-        clickOnButton(userProfileIcon, "User profile option");
-        logger.info("User clicking on the logout button");
-        clickOnButton(logoutBtn, "Logout button");
     }
 
     @Step("Verify the user logged into the system and navigates to the default Dashboard page test")

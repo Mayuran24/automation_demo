@@ -28,6 +28,6 @@ public class AdminManagementPageTest extends BaseTest {
         userDashboardPage.goToAdminUserManagementPage();
         adminManagementPage.verifyTopNavigationList();
         adminManagementPage.clickOnTopNavigationItem("Nationalities");
-        loginPage.clickLogoutBtn();
+        userDashboardPage.clickLogoutBtn();
     }
 }

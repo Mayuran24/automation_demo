@@ -17,9 +17,9 @@ import org.testng.annotations.Listeners;
 
 @Listeners({AllureListener.class})
 public abstract class BaseTest {
-    //protected WebDriver driver;
     private static final Logger logger = LogManager.getLogger(BaseTest.class);
     protected static ThreadLocal<WebDriver> driver = new ThreadLocal<>();
+
     private static String browser;
 
     private static String baseUrl;
@@ -41,17 +41,14 @@ public abstract class BaseTest {
         switch (browser) {
             case "chrome":
                 WebDriverManager.chromedriver().setup();
-                //driver = new ChromeDriver();
                 setDriver(new ChromeDriver());
                 break;
             case "firefox":
                 WebDriverManager.firefoxdriver().setup();
-                //driver = new FirefoxDriver();
                 setDriver(new FirefoxDriver());
                 break;
             case "edge":
                 WebDriverManager.edgedriver().setup();
-                //driver = new EdgeDriver();
                 setDriver(new EdgeDriver());
                 break;
             default:
@@ -60,6 +57,7 @@ public abstract class BaseTest {
 
         getDriver().manage().deleteAllCookies();
         getDriver().manage().window().maximize();
+        getDriver().manage().timeouts().getPageLoadTimeout();
 
         getDriver().get(baseUrl);
         logger.info("Navigated to base URL: " + baseUrl);

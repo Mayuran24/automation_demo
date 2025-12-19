@@ -6,13 +6,16 @@ import org.testng.asserts.SoftAssert;
 import base.BaseTest;
 import helper.ConfigReader;
 import pages.LoginPage;
+import pages.UserDashboardPage;
 
 public class LoginPageTest extends BaseTest {
     private LoginPage loginPage;
+    private UserDashboardPage userDashboardPage;
 
     @BeforeMethod(alwaysRun = true)
     public void initPage() {
         loginPage = new LoginPage(getDriver());
+        userDashboardPage = new UserDashboardPage(getDriver());
     }
 
     @Test(groups = {"regression"})
@@ -23,7 +26,6 @@ public class LoginPageTest extends BaseTest {
         loginPage.typeIntoPasswordField(ConfigReader.getProperty("password"));
         loginPage.clickLoginBtn();
         loginPage.verifyUserDashboard(getDriver(), softAssert);
-        loginPage.clickLogoutBtn();
-        softAssert.assertAll();
+        userDashboardPage.clickLogoutBtn();
     }
 }

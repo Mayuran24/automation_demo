@@ -8,17 +8,21 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Wait;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
 import java.util.List;
 
 public abstract class BasePage {
     protected WebDriver driver;
+    protected Logger logger;
     private HelperClass helper;
 
-    public BasePage(WebDriver driver) {
+    public BasePage(WebDriver driver, Class<?> pageClass) {
         this.driver = driver;
         helper = new HelperClass(driver);
+        this.logger = LoggerFactory.getLogger(pageClass);
     }
 
     public void clickOnButton(WebElement element, String buttonName) {

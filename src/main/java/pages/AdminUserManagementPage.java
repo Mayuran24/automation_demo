@@ -1,7 +1,6 @@
 package pages;
 
 import base.BasePage;
-
 import helper.HelperClass;
 import io.qameta.allure.Step;
 import io.qameta.allure.testng.AllureTestNg;
@@ -9,20 +8,20 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.testng.annotations.Listeners;
 
 import java.util.List;
+
 @Listeners({AllureTestNg.class})
 public class AdminUserManagementPage extends BasePage {
     private HelperClass helper;
+
     public AdminUserManagementPage(WebDriver driver) {
-        super(driver);
+        super(driver, AdminUserManagementPage.class);
         PageFactory.initElements(driver, this);
         helper = new HelperClass(driver);
     }
-    private static final Logger logger = LoggerFactory.getLogger(AdminUserManagementPage.class);
+
     @FindBy(xpath = "//li[contains(@class,'oxd-topbar-body-nav-tab')]//*[not(self::i)]")
     private List<WebElement> topNavigationList;
 
